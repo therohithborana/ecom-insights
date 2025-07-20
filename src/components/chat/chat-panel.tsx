@@ -23,9 +23,10 @@ type Message = {
 };
 
 const PRESET_QUESTIONS = [
-  "What are my sales in the last 7 days?",
-  "Calculate the RoAS (Return on Ad Spend).",
-  "Which product had the highest CPC (Cost Per Click)?",
+  "What were the total sales for the last 7 days?",
+  "Which 5 items have the highest ad sales?",
+  "Show the trend of ad spend and ad sales over time.",
+  "What is the overall Return on Ad Spend (RoAS)?",
 ];
 
 export function ChatPanel() {
@@ -116,7 +117,7 @@ export function ChatPanel() {
             {messages.length === 0 ? (
               <div className="text-center text-muted-foreground">
                 <p className="mb-4">No messages yet. Ask a question to start!</p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {PRESET_QUESTIONS.map((q) => (
                     <Button
                       key={q}
