@@ -28,7 +28,7 @@ export function ChatMessage({ role, content, isLoading }: ChatMessageProps) {
   const isUser = role === "user";
   const aiResponse = typeof content === "object" ? (content as AIResponse) : null;
 
-  const canVisualize = aiResponse?.visualization?.isVisualizable && aiResponse.data.rows.length > 0;
+  const canVisualize = aiResponse?.visualization?.isVisualizable === true && aiResponse.data.rows.length > 0;
 
   return (
     <div
