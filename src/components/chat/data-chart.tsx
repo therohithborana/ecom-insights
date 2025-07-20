@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from 'react';
-import { Bar, BarChart, Line, LineChart, Area, AreaChart, Pie, PieChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Bar, BarChart, Line, LineChart, Area, AreaChart, Pie, PieChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import { ChartContainer, ChartTooltipContent, ChartLegend, ChartLegendContent } from '@/components/ui/chart';
 
 type DataChartProps = {
@@ -57,7 +57,7 @@ export function DataChart({ data, chartType, title }: DataChartProps) {
             <Tooltip content={<ChartTooltipContent />} />
             <Legend content={<ChartLegendContent />} />
             {numericalKeys.map(key => (
-              <Line key={key} type="monotone" dataKey={key} stroke={`var(--color-${key})`} strokeWidth={2} dot={false} />
+              <Line key={key} type="monotone" dataKey={key} stroke={`var(--color-${key})`} strokeWidth={2} dot={true} />
             ))}
           </LineChart>
         );
@@ -70,7 +70,7 @@ export function DataChart({ data, chartType, title }: DataChartProps) {
             <Tooltip content={<ChartTooltipContent />} />
             <Legend content={<ChartLegendContent />} />
             {numericalKeys.map(key => (
-                 <Area key={key} type="monotone" dataKey={key} stackId="1" stroke={`var(--color-${key})`} fill={`var(--color-${key})`} fillOpacity={0.4} />
+                 <Area key={key} type="monotone" dataKey={key} stackId="1" stroke={`var(--color-${key})`} fill={`var(--color-${key})`} fillOpacity={0.4} strokeWidth={2} dot={true} />
             ))}
           </AreaChart>
         );
@@ -94,7 +94,7 @@ export function DataChart({ data, chartType, title }: DataChartProps) {
                     label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
                  >
                     {data.map((_, index) => (
-                        <_c key={`cell-${index}`} fill={`hsl(var(--chart-${(index % 5) + 1}))`} />
+                        <Cell key={`cell-${index}`} fill={`hsl(var(--chart-${(index % 5) + 1}))`} />
                     ))}
                  </Pie>
             </PieChart>
@@ -113,6 +113,3 @@ export function DataChart({ data, chartType, title }: DataChartProps) {
     </div>
   );
 }
-
-// Dummy component to satisfy Recharts API for PieChart cells
-const _c = (props: any) => <g {...props} />;
