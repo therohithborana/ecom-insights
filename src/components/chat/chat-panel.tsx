@@ -107,9 +107,6 @@ export function ChatPanel() {
   return (
     <Card className="w-full max-w-3xl h-[70vh] flex flex-col shadow-2xl rounded-2xl">
       <CardHeader className="border-b">
-        <p className="text-muted-foreground text-sm text-center">
-          This is a demo application. Database interactions are mocked.
-        </p>
       </CardHeader>
       <CardContent className="flex-1 overflow-hidden p-0">
         <ScrollArea className="h-full" ref={scrollAreaRef}>
