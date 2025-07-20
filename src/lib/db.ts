@@ -1,6 +1,7 @@
 import {open} from 'sqlite';
 import sqlite3 from 'sqlite3';
 import path from 'path';
+import fs from 'fs/promises';
 
 export interface QueryResult {
   columns: string[];
@@ -13,9 +14,14 @@ async function getDb() {
   if (db) {
     return db;
   }
-  const dbPath = path.resolve(process.cwd(), 'db/ecom.db');
-  
+
+  const dbDirectory = path.resolve(process.cwd(), 'db');
+  const dbPath = path.join(dbDirectory, 'ecom.db');
+
   try {
+    // Ensure the database directory exists
+    await fs.mkdir(dbDirectory, { recursive: true });
+
     db = await open({
       filename: dbPath,
       driver: sqlite3.Database,
