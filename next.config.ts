@@ -18,12 +18,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-        config.externals.push('sqlite3');
-    }
-    return config;
-  }
 };
 
 export default nextConfig;
