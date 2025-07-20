@@ -12,9 +12,9 @@ export interface AIResponse {
 }
 
 const dbSchema = `
-- ad_sales (product_id TEXT, date TEXT, ad_spend REAL, ad_sales REAL, clicks INTEGER, impressions INTEGER)
-- total_sales (product_id TEXT, date TEXT, total_sales_units INTEGER, total_sales_revenue REAL)
-- eligibility (product_id TEXT, product_name TEXT, is_eligible BOOLEAN)
+- ad_metrics (date TEXT, item_id TEXT, ad_sales REAL, impressions INTEGER, ad_spend REAL, clicks INTEGER, units_sold INTEGER)
+- total_sales (date TEXT, item_id TEXT, total_sales REAL, total_units_ordered INTEGER)
+- eligibility (item_id TEXT, eligibility BOOLEAN, message TEXT, eligibility_datetime_utc TEXT)
 `;
 
 export async function askQuestion(question: string): Promise<AIResponse> {
@@ -30,7 +30,7 @@ export async function askQuestion(question: string): Promise<AIResponse> {
       throw new Error("Failed to generate SQL query.");
     }
     
-    // 2. Execute the SQL query (against the mock DB)
+    // 2. Execute the SQL query
     const queryResult = await query(sqlQuery);
 
     // 3. Generate a natural language response from the data
