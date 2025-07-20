@@ -36,6 +36,7 @@ Only return the SQL query and nothing else. Do not wrap it in markdown or add ex
 
 IMPORTANT: When writing queries that involve division, you MUST handle potential division-by-zero errors. Use the NULLIF function to prevent these errors.
 For example, to calculate Return on Ad Spend (RoAS), instead of 'SUM(ad_sales) / SUM(ad_spend)', you should write 'SUM(ad_sales) * 1.0 / NULLIF(SUM(ad_spend), 0)'.
+For calculating Cost Per Click (CPC), a query might look like: 'SELECT item_id, ad_spend * 1.0 / NULLIF(clicks, 0) AS CPC FROM ad_metrics ORDER BY CPC DESC LIMIT 1;'. Always ensure calculations are safe.
 
 Schema:
 {{{schema}}}
