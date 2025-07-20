@@ -1,11 +1,12 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
-import { Bot, User, Database, FileCode2 } from "lucide-react";
+import { Bot, User, Database, FileCode2, BarChart } from "lucide-react";
 import type { AIResponse } from "@/app/actions";
 import { StreamingText } from "./streaming-text";
 import { Skeleton } from "../ui/skeleton";
+import * as React from 'react';
 import {
   Accordion,
   AccordionContent,
@@ -13,6 +14,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { DataChart } from "./data-chart";
 
 type ChatMessageProps = {
   role: "user" | "assistant";
@@ -21,8 +24,11 @@ type ChatMessageProps = {
 };
 
 export function ChatMessage({ role, content, isLoading }: ChatMessageProps) {
+  const [isChartVisible, setIsChartVisible] = React.useState(false);
   const isUser = role === "user";
   const aiResponse = typeof content === "object" ? (content as AIResponse) : null;
+
+  const canVisualize = aiResponse?.visualization?.isVisualizable && aiResponse.data.rows.length > 0;
 
   return (
     <div
@@ -57,6 +63,29 @@ export function ChatMessage({ role, content, isLoading }: ChatMessageProps) {
             {aiResponse ? (
               <div className="space-y-4">
                 <StreamingText text={aiResponse.answer} />
+
+                {canVisualize && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsChartVisible(!isChartVisible)}
+                  >
+                    <BarChart className="mr-2 h-4 w-4" />
+                    {isChartVisible ? "Hide" : "Visualize"}
+                  </Button>
+                )}
+
+                {isChartVisible && canVisualize && (
+                  <div className="w-full min-w-[400px] h-[300px] bg-background p-4 rounded-lg">
+                    <DataChart
+                      data={aiResponse.data.rows}
+                      chartType={aiResponse.visualization.chartType}
+                      title={aiResponse.visualization.chartTitle}
+                    />
+                  </div>
+                )}
+
+
                 <Accordion type="single" collapsible className="w-full">
                   <AccordionItem value="details" className="border-none">
                     <AccordionTrigger className="text-sm p-2 hover:no-underline -mb-2">

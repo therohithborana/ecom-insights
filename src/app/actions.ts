@@ -2,12 +2,21 @@
 
 import { generateSql } from "@/ai/flows/natural-language-to-sql";
 import { generateNaturalLanguageResponse } from "@/ai/flows/generate-natural-language-response";
+import { checkVisualization } from "@/ai/flows/check-visualization";
 import { query, type QueryResult } from "@/lib/db";
+
+export interface VisualizationInfo {
+  isVisualizable: boolean;
+  chartType: 'bar' | 'line' | 'area' | 'pie' | 'none';
+  chartTitle: string;
+  reasoning: string;
+}
 
 export interface AIResponse {
   answer: string;
   sql: string;
   data: QueryResult;
+  visualization?: VisualizationInfo;
   error?: string;
 }
 
@@ -44,10 +53,26 @@ export async function askQuestion(question: string): Promise<AIResponse> {
         throw new Error("Failed to generate a response.");
     }
 
+    // 4. Check if the data can be visualized
+    let visualization: VisualizationInfo = {
+      isVisualizable: false,
+      chartType: 'none',
+      chartTitle: '',
+      reasoning: '',
+    };
+
+    if (queryResult.rows.length > 0) {
+      visualization = await checkVisualization({
+        question,
+        data: JSON.stringify(queryResult)
+      });
+    }
+
     return {
       answer,
       sql: sqlQuery,
       data: queryResult,
+      visualization,
     };
   } catch (error) {
     console.error("Error in askQuestion action:", error);
