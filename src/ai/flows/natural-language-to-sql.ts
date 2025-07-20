@@ -34,6 +34,9 @@ const prompt = ai.definePrompt({
 
 Only return the SQL query and nothing else. Do not wrap it in markdown or add explanations.
 
+IMPORTANT: When writing queries that involve division, you MUST handle potential division-by-zero errors. Use the NULLIF function to prevent these errors.
+For example, to calculate Return on Ad Spend (RoAS), instead of 'SUM(ad_sales) / SUM(ad_spend)', you should write 'SUM(ad_sales) * 1.0 / NULLIF(SUM(ad_spend), 0)'.
+
 Schema:
 {{{schema}}}
 
